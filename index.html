@@ -275,7 +275,7 @@ iframe, img {
   <a href="https://fenixsim.com" target="_blank" rel="noopener noreferrer">Fenix Simulations</a><br>
   METAR by 
   <a href="https://www.checkwx.com" target="_blank" rel="noopener noreferrer">CheckWX</a><br>
-  ⚠️ NOT FOR REAL WORLD USE ⚠️ (v1.5)
+  ⚠️ NOT FOR REAL WORLD USE ⚠️ (v1.6)
 </div>
 
 <!-- LOGIN -->
@@ -480,6 +480,12 @@ async function showWindy() {
     if (!resp.ok) throw new Error("Airport not found");
 
     const data = await resp.json();
+
+    // Ensure coordinates exist
+    if (!data.location || typeof data.location.latitude !== "number" || typeof data.location.longitude !== "number") {
+      throw new Error("Coordinates not available for this airport");
+    }
+
     const lat = data.location.latitude;
     const lon = data.location.longitude;
 
@@ -495,8 +501,8 @@ async function showWindy() {
 
   } catch (err) {
     console.error(err);
+    box.innerHTML = ""; // clear the map
     showModal("Error", "Could not fetch airport coordinates or airport does not exist.");
-    box.innerText = "";
   }
 }
 
