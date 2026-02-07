@@ -7,6 +7,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <link rel="icon" href="https://raw.githubusercontent.com/myairplanefiles/myairplanefiles.github.io/4653f4e49a2ba1501b09e4fe5b551293ea1354ad/Logo.png" type="image/png" />
   <link rel="apple-touch-icon" sizes="180x180" href="AppleLogo.png">
+  <span style="position:fixed;bottom:0;right:0;font-family:Inter;padding:5px;">v1.2</span>
+
 
 
 
@@ -474,7 +476,6 @@ async function fetchMetar() {
 document.getElementById("icaoInput").addEventListener("keydown", e => {
   if (e.key === "Enter") fetchMetar();
 });
-<span style="position:fixed;bottom:0;right:0;font-family:Inter;padding:5px;">v1.2</span>
 
 // Prevent mobile scrolling (iOS safeguard)
 document.addEventListener('touchmove', function(e){e.preventDefault();},{passive:false});
