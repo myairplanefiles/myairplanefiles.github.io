@@ -454,21 +454,24 @@ async function fetchMetar() {
   resultBox.innerText = "Fetching METAR…";
 
   try {
-    const targetUrl = `https://metar-taf.com/${icao}`;
+    // MetarCentral URL for a specific ICAO
+    const targetUrl = `https://metarcentral.com/airport/${icao}`;
     const url = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
 
     const resp = await fetch(url);
     const data = await resp.json();
     const html = data.contents;
 
-    // METAR-TAF.COM puts METAR inside <code> blocks
-    const metarMatch = html.match(/<code[^>]*>([A-Z]{4}\s+\d{6}Z[\s\S]*?)<\/code>/i);
+    // MetarCentral puts the raw METAR inside <pre> or <font> tags
+    const metarMatch = html.match(/<pre[^>]*>([A-Z]{4}\s+\d{6}Z[\s\S]*?)<\/pre>/i)
+                    || html.match(/<font[^>]*>([A-Z]{4}\s+\d{6}Z[\s\S]*?)<\/font>/i);
 
     const metarText = metarMatch
       ? metarMatch[1].replace(/\s+/g, " ").trim()
       : "METAR not found";
 
     resultBox.innerText = metarText;
+
   } catch (err) {
     console.error(err);
     resultBox.innerText = "Error fetching METAR";
