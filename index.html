@@ -448,20 +448,31 @@ async function fetchMetar() {
   const resultBox = document.getElementById("metarResultBox");
 
   if (!icao || icao.length !== 4) {
-    showModal("Invalid ICAO", "Enter a valid 4-letter ICAO code");
+    showModal("Invalid ICAO", "Enter a valid 4‑letter ICAO code");
     return;
   }
 
   resultBox.innerText = "Fetching METAR…";
 
   try {
-    // Official NOAA METAR data in raw text
-    const targetUrl = `https://aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=raw&hoursBeforeNow=1&stationString=${icao}`;
-    const url = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
+    // CheckWX API endpoint with your API key
+    const apiKey = "c0f5316355f24801baf0a280e916e467";
+    const url = `https://api.checkwx.com/metar/${icao}`;
 
-    const resp = await fetch(url);
-    const data = await resp.json();
-    const metarText = data.contents.trim() || "METAR not found";
+    const resp = await fetch(url, {
+      headers: {
+        "X-API-Key": apiKey
+      }
+    });
+
+    if (!resp.ok) throw new Error("METAR fetch failed");
+
+    const json = await resp.json();
+
+    // The raw METAR text is in json.data[0]
+    const metarText = (json.data && json.data.length > 0)
+      ? json.data[0]
+      : "METAR not found";
 
     resultBox.innerText = metarText;
 
