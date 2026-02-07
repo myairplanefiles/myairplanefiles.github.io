@@ -457,27 +457,49 @@ function requestWindy() {
   document.getElementById("windyInput").value = "";
 }
 
-function showWindy() {
+async function showWindy() {
   const icao = document.getElementById("windyInput").value.trim().toUpperCase();
   const box = document.getElementById("windyMapBox");
-  if (!icao || icao.length !== 4) { showModal("Invalid ICAO", "Enter a valid 4‑letter ICAO code"); return; }
 
-  fetch(`https://avwx.rest/api/station/${icao}?token=demo`)
-    .then(res => res.json())
-    .then(data => {
-      const lat = data.latitude || 0;
-      const lon = data.longitude || 0;
-      const iframe = document.createElement("iframe");
-      iframe.src = `https://embed.windy.com/embed2.html?lat=${lat}&lon=${lon}&zoom=8&level=surface&overlay=wind&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=kt&metricTemp=%C2%B0C&radarRange=-1`;
-      iframe.style.width = "100%";
-      iframe.style.height = "400px";
-      iframe.style.border = "none";
-      iframe.style.borderRadius = "16px";
-      box.innerHTML = "";
-      box.appendChild(iframe);
-    })
-    .catch(err => { console.error(err); box.innerText = "Failed to load Windy map"; });
+  if (!icao || icao.length !== 4) {
+    showModal("Invalid ICAO", "Enter a valid 4-letter ICAO code");
+    return;
+  }
+
+  box.innerText = "Fetching airport coordinates…";
+
+  try {
+    const resp = await fetch(`https://aerodatabox.p.rapidapi.com/airports/icao/${icao}`, {
+      method: "GET",
+      headers: {
+        "X-RapidAPI-Key": "206a18ce78msh0e5a0eb89f9e390p15d7c1jsn205c808908db",
+        "X-RapidAPI-Host": "aerodatabox.p.rapidapi.com"
+      }
+    });
+
+    if (!resp.ok) throw new Error("Airport not found");
+
+    const data = await resp.json();
+    const lat = data.location.latitude;
+    const lon = data.location.longitude;
+
+    const iframe = document.createElement("iframe");
+    iframe.src = `https://embed.windy.com/embed2.html?lat=${lat}&lon=${lon}&zoom=8&level=surface&overlay=wind&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=kt&metricTemp=%C2%B0C&radarRange=-1`;
+    iframe.style.width = "100%";
+    iframe.style.height = "400px";
+    iframe.style.border = "none";
+    iframe.style.borderRadius = "16px";
+
+    box.innerHTML = "";
+    box.appendChild(iframe);
+
+  } catch (err) {
+    console.error(err);
+    showModal("Error", "Could not fetch airport coordinates or airport does not exist.");
+    box.innerText = "";
+  }
 }
+
 
 document.getElementById("windyInput").addEventListener("keydown", e => { if(e.key==="Enter") showWindy(); });
 
