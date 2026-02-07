@@ -425,26 +425,56 @@ function flipTo(text){const chars=text.split("");if(chars.length===5&&flipText.c
 createFlip(["A","3","2","0"]);function loopFlip(){setTimeout(()=>flipTo("HELLO"),600);setTimeout(()=>flipTo("A320"),4800);}loopFlip();setInterval(loopFlip,9500);
 
 // ZULU TIME
-function updateZulu(){const now=new Date();const utc=new Date(now.getTime()+(now.getTimezoneOffset()*60000));document.getElementById("zuluTime").innerText=utc.toISOString().substr(11,8);document.getElementById("zuluDate").innerText=utc.toISOString().substr(0,10);}
+function updateZulu() {
+  const now = new Date();
+
+  const hh = String(now.getUTCHours()).padStart(2, "0");
+  const mm = String(now.getUTCMinutes()).padStart(2, "0");
+
+  document.getElementById("zuluTime").innerText = `${hh}${mm}z`;
+  document.getElementById("zuluDate").innerText = now.toISOString().slice(0, 10);
+}
 setInterval(updateZulu,1000);updateZulu();
 
-// METAR
-function requestMetar(){document.getElementById("metarModal").classList.add("active");document.getElementById("metarResultBox").innerText="METAR will appear here";document.getElementById("icaoInput").value="";}
-async function fetchMetar(){
-    const icao=document.getElementById("icaoInput").value.trim().toUpperCase();
-    const resultBox=document.getElementById("metarResultBox");
-    if(!icao || icao.length!==4){showModal("Invalid ICAO","Enter a valid 4-letter ICAO code");return;}
-    resultBox.innerText="Fetching METAR…";
-    try{
-        const url=`https://api.allorigins.win/get?url=${encodeURIComponent(`https://ourairports.com/airports/${icao}/weather.html`)}`;
-        const resp=await fetch(url);
-        const data=await resp.json();
-        const html=data.contents;
-        const metarMatch=html.match(/\b[A-Z]{4}\s+\d{6}Z.*?KT.*?(?=<|$)/s);
-        const metarText=metarMatch?metarMatch[0].trim():"METAR not found";
-        resultBox.innerText=metarText;
-    }catch(err){console.error(err);resultBox.innerText="Error fetching METAR";}
+function requestMetar() {
+  document.getElementById("metarModal").classList.add("active");
+  document.getElementById("metarResultBox").innerText = "METAR will appear here";
+  document.getElementById("icaoInput").value = "";
 }
+
+async function fetchMetar() {
+  const icao = document.getElementById("icaoInput").value.trim().toUpperCase();
+  const resultBox = document.getElementById("metarResultBox");
+
+  if (!icao || icao.length !== 4) {
+    showModal("Invalid ICAO", "Enter a valid 4-letter ICAO code");
+    return;
+  }
+
+  resultBox.innerText = "Fetching METAR…";
+
+  try {
+    const targetUrl = `https://metar-taf.com/${icao}`;
+    const url = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
+
+    const resp = await fetch(url);
+    const data = await resp.json();
+    const html = data.contents;
+
+    // METAR-TAF.COM puts METAR inside <code> blocks
+    const metarMatch = html.match(/<code[^>]*>([A-Z]{4}\s+\d{6}Z[\s\S]*?)<\/code>/i);
+
+    const metarText = metarMatch
+      ? metarMatch[1].replace(/\s+/g, " ").trim()
+      : "METAR not found";
+
+    resultBox.innerText = metarText;
+  } catch (err) {
+    console.error(err);
+    resultBox.innerText = "Error fetching METAR";
+  }
+}
+
 
 // Prevent mobile scrolling (iOS safeguard)
 document.addEventListener('touchmove', function(e){e.preventDefault();},{passive:false});
