@@ -454,21 +454,13 @@ async function fetchMetar() {
   resultBox.innerText = "Fetching METAR…";
 
   try {
-    // MetarCentral URL for a specific ICAO
-    const targetUrl = `https://metarcentral.com/airport/${icao}`;
+    // Official NOAA METAR data in raw text
+    const targetUrl = `https://aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=raw&hoursBeforeNow=1&stationString=${icao}`;
     const url = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
 
     const resp = await fetch(url);
     const data = await resp.json();
-    const html = data.contents;
-
-    // MetarCentral puts the raw METAR inside <pre> or <font> tags
-    const metarMatch = html.match(/<pre[^>]*>([A-Z]{4}\s+\d{6}Z[\s\S]*?)<\/pre>/i)
-                    || html.match(/<font[^>]*>([A-Z]{4}\s+\d{6}Z[\s\S]*?)<\/font>/i);
-
-    const metarText = metarMatch
-      ? metarMatch[1].replace(/\s+/g, " ").trim()
-      : "METAR not found";
+    const metarText = data.contents.trim() || "METAR not found";
 
     resultBox.innerText = metarText;
 
@@ -478,6 +470,10 @@ async function fetchMetar() {
   }
 }
 
+// Optional: allow Enter key to fetch
+document.getElementById("icaoInput").addEventListener("keydown", e => {
+  if (e.key === "Enter") fetchMetar();
+});
 
 // Prevent mobile scrolling (iOS safeguard)
 document.addEventListener('touchmove', function(e){e.preventDefault();},{passive:false});
