@@ -8,6 +8,8 @@
   <link rel="icon" href="https://raw.githubusercontent.com/myairplanefiles/myairplanefiles.github.io/4653f4e49a2ba1501b09e4fe5b551293ea1354ad/Logo.png" type="image/png" />
   <link rel="apple-touch-icon" sizes="180x180" href="AppleLogo.png">
 
+
+
 <style>
 :root {
   --bg: #f2f2f7;
@@ -15,89 +17,288 @@
   --text: #000;
   --accent: #0a84ff;
 }
-body.dark { --bg:#0b0b0f; --card:rgba(28,28,30,.8); --text:#fff; }
-*{box-sizing:border-box}
-html,body{
-  overflow:hidden;height:100%;width:100%;touch-action:none;margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Roboto,sans-serif;
-  background:var(--bg);color:var(--text);position:fixed;inset:0;
-  transition:background 1.2s ease;
+
+body.dark {
+  --bg: #0b0b0f;
+  --card: rgba(28,28,30,0.8);
+  --text: #fff;
 }
-#topbar{
-  position:fixed;top:10px;left:10px;font-family:Roboto,monospace;font-size:16px;
-  background:rgba(255,255,255,.5);padding:8px 12px;border-radius:12px;
-  backdrop-filter:blur(12px);z-index:100;line-height:1.4
+
+* { box-sizing: border-box; }
+
+/* Prevent scrolling on all devices */
+html, body {
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  touch-action: none;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  position: relative;
+  transition: background 1.2s ease;
 }
-#themeSwitch{
-  position:fixed;top:10px;right:10px;font-size:22px;cursor:pointer;
-  padding:8px 12px;border-radius:12px;border:1px solid rgba(0,0,0,.25);
-  backdrop-filter:blur(12px);background:rgba(255,255,255,.5);z-index:100
+
+/* Top bar for ZULU */
+#topbar {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  font-family: "Roboto", monospace;
+  font-size: 16px;
+  background: rgba(255,255,255,0.5);
+  padding: 8px 12px;
+  border-radius: 12px;
+  backdrop-filter: blur(12px);
+  z-index: 100;
+  text-align: left;
+  line-height: 1.4;
 }
-.screen{
-  position:fixed;inset:0;display:flex;justify-content:center;align-items:center;
-  padding:0 20px;transform:translateX(120%);
-  transition:transform 1.2s cubic-bezier(.2,.9,.15,1)
+
+/* Theme switch */
+#themeSwitch {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  font-size: 22px;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.25);
+  backdrop-filter: blur(12px);
+  background: rgba(255,255,255,0.5);
+  z-index: 100;
+  transition: transform 0.3s ease;
 }
-.screen.active{transform:translateX(0)}
-.card{
-  width:100%;max-width:460px;min-width:320px;background:var(--card);
-  backdrop-filter:blur(30px) saturate(160%);border-radius:28px;padding:32px;
-  box-shadow:0 40px 80px rgba(0,0,0,.35);text-align:center;
-  display:flex;flex-direction:column;align-items:center;justify-content:center
+#themeSwitch:hover { transform: scale(1.1); }
+
+/* Screens */
+.screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 0 20px;
+  transform: translateX(120%);
+  transition: transform 1.2s cubic-bezier(.2,.9,.15,1);
 }
-.menu{display:grid;gap:12px}
-input{width:100%;padding:14px;border-radius:14px;border:none;margin:10px 0;font-size:16px}
-button{
-  width:100%;padding:15px;border-radius:16px;border:none;
-  background:linear-gradient(135deg,#0a84ff,#64d2ff);color:#fff;font-size:17px;
-  cursor:pointer;transition:transform .45s ease,box-shadow .45s ease
+.screen.active { transform: translateX(0); }
+
+/* Card */
+.card {
+  width: 100%;
+  max-width: 460px;
+  min-width: 320px;
+  background: var(--card);
+  backdrop-filter: blur(30px) saturate(160%);
+  border-radius: 28px;
+  padding: 32px;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.35);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
-button:hover{transform:scale(1.04);box-shadow:0 12px 30px rgba(10,132,255,.5)}
-.small{background:transparent;color:var(--text);border:1px solid rgba(255,255,255,.4)}
-.viewer-wrap{
-  width:100%;max-width:900px;height:88vh;background:var(--card);
-  backdrop-filter:blur(30px);border-radius:28px;padding:14px;
-  box-shadow:0 40px 80px rgba(0,0,0,.35);display:flex;flex-direction:column;align-items:center
+
+.menu { display: grid; gap: 12px; }
+
+input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  margin: 10px 0;
+  font-size: 16px;
 }
-iframe,img{width:100%;height:100%;border-radius:18px;border:none;object-fit:contain}
-#disclaimer{
-  position:fixed;bottom:12px;left:12px;font-size:13px;font-family:Roboto,sans-serif;
-  color:rgba(0,0,0,.7);z-index:200
+
+button {
+  width: 100%;
+  padding: 15px;
+  border-radius: 16px;
+  border: none;
+  background: linear-gradient(135deg, #0a84ff, #64d2ff);
+  color: white;
+  font-size: 17px;
+  cursor: pointer;
+  transition: transform 0.45s ease, box-shadow 0.45s ease;
 }
-#disclaimer a{color:var(--accent);text-decoration:none}
-#disclaimer a:hover{text-decoration:underline}
-.modal{
-  position:fixed;inset:0;background:rgba(0,0,0,.35);
-  display:flex;align-items:center;justify-content:center;
-  backdrop-filter:blur(10px);opacity:0;pointer-events:none;
-  transition:.6s ease;z-index:50
+
+button:hover {
+  transform: scale(1.04);
+  box-shadow: 0 12px 30px rgba(10,132,255,0.5);
 }
-.modal.active{opacity:1;pointer-events:auto}
-#metarResultBox{
-  width:100%;background:rgba(10,132,255,.85);color:#fff;font-family:Roboto,sans-serif;
-  font-weight:700;padding:12px;border-radius:16px;margin-bottom:12px;text-align:center
+
+.small {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,0.4);
+}
+
+/* Viewer */
+.viewer-wrap {
+  width: 100%;
+  max-width: 900px;
+  height: 88vh;
+  background: var(--card);
+  backdrop-filter: blur(30px);
+  border-radius: 28px;
+  padding: 14px;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.35);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+iframe, img {
+  width: 100%;
+  height: 100%;
+  border-radius: 18px;
+  border: none;
+}
+
+#imgFrame {
+  object-fit: contain;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* Siri background */
+.siri-bg {
+  position: absolute;
+  inset: -25%;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(255, 99, 132, 0.9), transparent 45%),
+    radial-gradient(circle at 80% 20%, rgba(90, 200, 250, 0.9), transparent 45%),
+    radial-gradient(circle at 50% 80%, rgba(191, 90, 242, 0.9), transparent 45%),
+    radial-gradient(circle at 30% 70%, rgba(52, 199, 89, 0.9), transparent 45%);
+  filter: blur(90px) saturate(160%);
+  animation: siriFlow 26s infinite alternate ease-in-out;
+  z-index: -1;
+}
+
+@keyframes siriFlow {
+  0%   { transform: scale(1) translate(0,0); }
+  50%  { transform: scale(1.15) translate(-6%, 6%); }
+  100% { transform: scale(1.3) translate(6%, -6%); }
+}
+
+/* Flip clock */
+.flip-text {
+  display: flex;
+  justify-content: center;
+  font-family: "SF Mono", monospace;
+  font-size: 42px;
+  font-weight: 600;
+  letter-spacing: 6px;
+  perspective: 800px;
+  margin-bottom: 12px;
+}
+
+.flip-char {
+  width: 32px;
+  height: 56px;
+  position: relative;
+  margin: 0 2px;
+  perspective: 600px;
+}
+
+.flip-char span {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #111;
+  color: #0a84ff;
+  border-radius: 6px;
+  backface-visibility: hidden;
+  transition: transform 0.6s cubic-bezier(.2,.8,.2,1);
+}
+
+.flip-char .front { transform: rotateX(0deg); }
+.flip-char.flip .front { transform: rotateX(-180deg); }
+.flip-char .back { transform: rotateX(180deg); }
+.flip-char.flip .back { transform: rotateX(0deg); }
+
+/* Modal */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.6s ease;
+  z-index: 50;
+}
+.modal.active { opacity: 1; pointer-events: auto; }
+.modal .card { max-width: 480px; width: 90%; }
+
+/* METAR Box */
+#metarResultBox {
+  width: 100%;
+  background: rgba(10,132,255,0.85);
+  color: white;
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  padding: 12px;
+  border-radius: 16px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+/* Disclaimer */
+#disclaimer {
+  position: fixed;
+  bottom: 12px;
+  left: 12px;
+  font-size: 13px;
+  font-family: "Roboto", sans-serif;
+  color: rgba(0,0,0,0.7);
+  z-index: 200;
+}
+#disclaimer a {
+  color: var(--accent);
+  text-decoration: none;
+}
+#disclaimer a:hover {
+  text-decoration: underline;
 }
 </style>
 </head>
 <body>
 
+<!-- ZULU top-left -->
 <div id="topbar">
   ZULU: <span id="zuluTime">--:--:--</span><br>
-  <span id="zuluDate">----</span>
+  <span id="zuluDate">--/--/----</span>
 </div>
 
+<!-- Theme switch top-right -->
 <div id="themeSwitch" onclick="toggleTheme()">🌗</div>
 
+<!-- Disclaimer bottom-left -->
 <div id="disclaimer">
-  QRH provided by <a href="https://fenixsim.com" target="_blank">Fenix Simulations</a><br>
-  METAR by <a href="https://ourairports.com" target="_blank">ourairports.com</a><br>
+  QRH provided by 
+  <a href="https://fenixsim.com" target="_blank" rel="noopener noreferrer">Fenix Simulations</a><br>
+  METAR by 
+  <a href="https://ourairports.com" target="_blank" rel="noopener noreferrer">ourairports.com</a><br>
   ⚠️ NOT FOR REAL WORLD USE ⚠️
 </div>
 
 <!-- LOGIN -->
 <div id="login" class="screen active">
+  <div class="siri-bg"></div>
   <div class="card">
-    <h1>A320</h1>
+    <div class="flip-text" id="flipText"></div>
     <input id="user" placeholder="Username">
     <input id="pass" type="password" placeholder="Password">
     <button onclick="login()">Login</button>
@@ -114,56 +315,589 @@ iframe,img{width:100%;height:100%;border-radius:18px;border:none;object-fit:cont
   </div>
 </div>
 
-<!-- METAR -->
+<!-- METAR modal -->
 <div id="metarModal" class="modal">
   <div class="card">
-    <h2>METAR</h2>
+    <h2>METAR Request</h2>
+    <h4>The metar system may fail, if so, reload the page or try again later.</h4>
     <div id="metarResultBox">METAR will appear here</div>
-    <input id="icaoInput" placeholder="Enter ICAO (e.g. KJFK)">
-    <div style="display:flex;gap:12px;margin-top:12px">
-      <button onclick="fetchMetar()">Get METAR</button>
-      <button onclick="closeModal('metarModal')">Close</button>
+    <input id="icaoInput" placeholder="Enter ICAO code">
+    <div style="display:flex; gap:12px; margin-top:12px;">
+      <button style="flex:1" onclick="fetchMetar()">Get METAR</button>
+      <button style="flex:1" onclick="closeModal('metarModal')">Close</button>
     </div>
   </div>
 </div>
 
+<!-- QRH -->
+<div id="qrh" class="screen">
+  <div class="card menu">
+    <button class="small" onclick="back()">⬅ Back</button>
+    <h1>Select Aircraft</h1>
+    <button onclick="go('engine')">A319</button>
+    <button onclick="go('engine')">A320</button>
+    <button onclick="go('engine')">A321</button>
+  </div>
+</div>
+
+<!-- ENGINE -->
+<div id="engine" class="screen">
+  <div class="card menu">
+    <button class="small" onclick="back()">⬅ Back</button>
+    <h1>Select Engine</h1>
+    <button onclick="openViewer('A320 QRH - IAE','https://docs.google.com/gview?embedded=true&url=https://raw.githubusercontent.com/mateitomensajero/fnxqrhs/dd1b02eeadc96b82bb4df65a598d2f5292b96725/Fenix%20IAE%20QRH.pdf')">IAE</button>
+    <button onclick="openViewer('A320 QRH - CFM','https://docs.google.com/gview?embedded=true&url=https://raw.githubusercontent.com/mateitomensajero/fnxqrhs/dd1b02eeadc96b82bb4df65a598d2f5292b96725/Fenix%20CFM%20QRH.pdf')">CFM</button>
+  </div>
+</div>
+
+<!-- CHECKLISTS -->
+<div id="checklists" class="screen">
+  <div class="card menu">
+    <button class="small" onclick="back()">⬅ Back</button>
+    <h1>Select Aircraft</h1>
+    <button onclick="openChecklist('A319 Checklist','https://cdn.flightsim.to/images/27/a319a320a321-checklist--457255-1731234405-8b9fm.jpg?width=800')">A319</button>
+    <button onclick="openChecklist('A320 Checklist','https://cdn.x-plane.to/images/01/airbus-a32x-checklist-2022-38PzO.jpg?width=1400&auto_optimize=medium')">A320</button>
+    <button onclick="openChecklist('A321 Checklist','https://media.invisioncic.com/c334187/monthly_2025_11/92ad0a11_a245_4004_8835_5a255ac88ba1_6b78677008f43dd5a6b6c52d0621b0dc0c28fc88.jpeg.18ce901d51b1bbe3a23ff6db56161f4d.jpeg')">A321</button>
+  </div>
+</div>
+
+<!-- VIEWER -->
+<div id="viewer" class="screen">
+  <div class="viewer-wrap">
+    <button class="small" style="align-self:flex-start;" onclick="back()">⬅ Back</button>
+    <h2 id="viewerTitle"></h2>
+    <iframe id="pdfFrame"></iframe>
+    <img id="imgFrame" style="display:none" />
+  </div>
+</div>
+
+<!-- ERROR MODAL -->
+<div id="modal" class="modal">
+  <div class="card">
+    <h2 id="modalTitle">Error</h2>
+    <p id="modalMsg"></p>
+    <button onclick="closeModal()">OK</button>
+  </div>
+</div>
+
 <script>
+// LOGIN
 const LOGINACCEPTED=[{user:"CAPI.a",password:"lorenzo1."},{user:"Pilotojesu",password:"PilotojesuOficial!"},{user:"mzattyz",password:"mialovesmatteo"}];
 let historyStack=["login"];
 function go(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");historyStack.push(id);}
-function login(){if(!LOGINACCEPTED.some(a=>a.user===user.value&&a.password===pass.value)) return alert("Login failed");go("main")}
-function toggleTheme(){document.body.classList.toggle("dark")}
-function closeModal(id){document.getElementById(id).classList.remove("active")}
-function requestMetar(){metarModal.classList.add("active");metarResultBox.innerText="METAR will appear here";icaoInput.value=""}
+function back(){historyStack.pop();const prev=historyStack[historyStack.length-1]||"main";document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById(prev).classList.add("active");}
+function login(){const ok=LOGINACCEPTED.some(a=>a.user===user.value&&a.password===pass.value);if(!ok)return showModal("Login Failed","Incorrect username or password.");go("main");}
+function openViewer(title,url){viewerTitle.innerText=title;const isPDF=url.includes(".pdf");pdfFrame.style.display=isPDF?"block":"none";imgFrame.style.display=isPDF?"none":"block";if(isPDF) pdfFrame.src=url;else imgFrame.src=url;go("viewer");}
 
-// ✅ FIXED METAR (OurAirports via AllOrigins)
+// CHECKLISTS
+function openChecklist(title, url){
+    imgFrame.style.display = "block";
+    pdfFrame.style.display = "none";
+    imgFrame.src = url;
+
+    // Hide title for checklist images
+    viewerTitle.innerText = "";
+
+    // Size per aircraft
+    if(title.includes("A319")) {
+        imgFrame.style.maxWidth = "800px";
+        imgFrame.style.maxHeight = "70vh";
+    } else if(title.includes("A320")) {
+        imgFrame.style.maxWidth = "1400px";
+        imgFrame.style.maxHeight = "65vh";  // smaller vertical than before
+    } else if(title.includes("A321")) {
+        imgFrame.style.maxWidth = "1200px";
+        imgFrame.style.maxHeight = "60vh";  // smaller vertical
+    }
+
+    go("viewer");
+}
+
+function showModal(title,msg){modalTitle.innerText=title;modalMsg.innerText=msg;modal.classList.add("active");}
+function closeModal(modalId="modal"){document.getElementById(modalId).classList.remove("active");}
+function toggleTheme(){document.body.classList.toggle("dark");}
+
+// Flip Clock
+const flipText=document.getElementById("flipText");
+function createFlip(chars){flipText.innerHTML="";chars.forEach(c=>{const d=document.createElement("div");d.className="flip-char";d.innerHTML=`<span class="front">${c}</span><span class="back"></span>`;flipText.appendChild(d);});}
+function addTile(char=""){const d=document.createElement("div");d.className="flip-char";d.innerHTML=`<span class="front"></span><span class="back">${char}</span>`;flipText.appendChild(d);return d;}
+function flipTo(text){const chars=text.split("");if(chars.length===5&&flipText.children.length===4)addTile("");[...flipText.children].forEach((el,i)=>{setTimeout(()=>{el.querySelector(".back").innerText=chars[i]||"";el.classList.add("flip");setTimeout(()=>{el.querySelector(".front").innerText=chars[i]||"";el.classList.remove("flip");},650);},i*500);});if(chars.length===4&&flipText.children.length===5){const last=flipText.lastElementChild;setTimeout(()=>{last.querySelector(".back").innerText="";last.classList.add("flip");setTimeout(()=>flipText.removeChild(last),650);},2200);}}
+createFlip(["A","3","2","0"]);function loopFlip(){setTimeout(()=>flipTo("HELLO"),600);setTimeout(()=>flipTo("A320"),4800);}loopFlip();setInterval(loopFlip,9500);
+
+// ZULU TIME
+function updateZulu(){const now=new Date();const utc=new Date(now.getTime()+(now.getTimezoneOffset()*60000));document.getElementById("zuluTime").innerText=utc.toISOString().substr(11,8);document.getElementById("zuluDate").innerText=utc.toISOString().substr(0,10);}
+setInterval(updateZulu,1000);updateZulu();
+
+// METAR
+function requestMetar(){document.getElementById("metarModal").classList.add("active");document.getElementById("metarResultBox").innerText="METAR will appear here";document.getElementById("icaoInput").value="";}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>My Airplane Files</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="https://raw.githubusercontent.com/myairplanefiles/myairplanefiles.github.io/4653f4e49a2ba1501b09e4fe5b551293ea1354ad/Logo.png" type="image/png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="AppleLogo.png">
+
+
+
+<style>
+:root {
+  --bg: #f2f2f7;
+  --card: rgba(255,255,255,0.75);
+  --text: #000;
+  --accent: #0a84ff;
+}
+
+body.dark {
+  --bg: #0b0b0f;
+  --card: rgba(28,28,30,0.8);
+  --text: #fff;
+}
+
+* { box-sizing: border-box; }
+
+/* Prevent scrolling on all devices */
+html, body {
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  touch-action: none;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  position: relative;
+  transition: background 1.2s ease;
+}
+
+/* Top bar for ZULU */
+#topbar {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  font-family: "Roboto", monospace;
+  font-size: 16px;
+  background: rgba(255,255,255,0.5);
+  padding: 8px 12px;
+  border-radius: 12px;
+  backdrop-filter: blur(12px);
+  z-index: 100;
+  text-align: left;
+  line-height: 1.4;
+}
+
+/* Theme switch */
+#themeSwitch {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  font-size: 22px;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.25);
+  backdrop-filter: blur(12px);
+  background: rgba(255,255,255,0.5);
+  z-index: 100;
+  transition: transform 0.3s ease;
+}
+#themeSwitch:hover { transform: scale(1.1); }
+
+/* Screens */
+.screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 0 20px;
+  transform: translateX(120%);
+  transition: transform 1.2s cubic-bezier(.2,.9,.15,1);
+}
+.screen.active { transform: translateX(0); }
+
+/* Card */
+.card {
+  width: 100%;
+  max-width: 460px;
+  min-width: 320px;
+  background: var(--card);
+  backdrop-filter: blur(30px) saturate(160%);
+  border-radius: 28px;
+  padding: 32px;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.35);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu { display: grid; gap: 12px; }
+
+input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+button {
+  width: 100%;
+  padding: 15px;
+  border-radius: 16px;
+  border: none;
+  background: linear-gradient(135deg, #0a84ff, #64d2ff);
+  color: white;
+  font-size: 17px;
+  cursor: pointer;
+  transition: transform 0.45s ease, box-shadow 0.45s ease;
+}
+
+button:hover {
+  transform: scale(1.04);
+  box-shadow: 0 12px 30px rgba(10,132,255,0.5);
+}
+
+.small {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,0.4);
+}
+
+/* Viewer */
+.viewer-wrap {
+  width: 100%;
+  max-width: 900px;
+  height: 88vh;
+  background: var(--card);
+  backdrop-filter: blur(30px);
+  border-radius: 28px;
+  padding: 14px;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.35);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+iframe, img {
+  width: 100%;
+  height: 100%;
+  border-radius: 18px;
+  border: none;
+}
+
+#imgFrame {
+  object-fit: contain;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* Siri background */
+.siri-bg {
+  position: absolute;
+  inset: -25%;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(255, 99, 132, 0.9), transparent 45%),
+    radial-gradient(circle at 80% 20%, rgba(90, 200, 250, 0.9), transparent 45%),
+    radial-gradient(circle at 50% 80%, rgba(191, 90, 242, 0.9), transparent 45%),
+    radial-gradient(circle at 30% 70%, rgba(52, 199, 89, 0.9), transparent 45%);
+  filter: blur(90px) saturate(160%);
+  animation: siriFlow 26s infinite alternate ease-in-out;
+  z-index: -1;
+}
+
+@keyframes siriFlow {
+  0%   { transform: scale(1) translate(0,0); }
+  50%  { transform: scale(1.15) translate(-6%, 6%); }
+  100% { transform: scale(1.3) translate(6%, -6%); }
+}
+
+/* Flip clock */
+.flip-text {
+  display: flex;
+  justify-content: center;
+  font-family: "SF Mono", monospace;
+  font-size: 42px;
+  font-weight: 600;
+  letter-spacing: 6px;
+  perspective: 800px;
+  margin-bottom: 12px;
+}
+
+.flip-char {
+  width: 32px;
+  height: 56px;
+  position: relative;
+  margin: 0 2px;
+  perspective: 600px;
+}
+
+.flip-char span {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #111;
+  color: #0a84ff;
+  border-radius: 6px;
+  backface-visibility: hidden;
+  transition: transform 0.6s cubic-bezier(.2,.8,.2,1);
+}
+
+.flip-char .front { transform: rotateX(0deg); }
+.flip-char.flip .front { transform: rotateX(-180deg); }
+.flip-char .back { transform: rotateX(180deg); }
+.flip-char.flip .back { transform: rotateX(0deg); }
+
+/* Modal */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.6s ease;
+  z-index: 50;
+}
+.modal.active { opacity: 1; pointer-events: auto; }
+.modal .card { max-width: 480px; width: 90%; }
+
+/* METAR Box */
+#metarResultBox {
+  width: 100%;
+  background: rgba(10,132,255,0.85);
+  color: white;
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  padding: 12px;
+  border-radius: 16px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+/* Disclaimer */
+#disclaimer {
+  position: fixed;
+  bottom: 12px;
+  left: 12px;
+  font-size: 13px;
+  font-family: "Roboto", sans-serif;
+  color: rgba(0,0,0,0.7);
+  z-index: 200;
+}
+#disclaimer a {
+  color: var(--accent);
+  text-decoration: none;
+}
+#disclaimer a:hover {
+  text-decoration: underline;
+}
+</style>
+</head>
+<body>
+
+<!-- ZULU top-left -->
+<div id="topbar">
+  ZULU: <span id="zuluTime">--:--:--</span><br>
+  <span id="zuluDate">--/--/----</span>
+</div>
+
+<!-- Theme switch top-right -->
+<div id="themeSwitch" onclick="toggleTheme()">🌗</div>
+
+<!-- Disclaimer bottom-left -->
+<div id="disclaimer">
+  QRH provided by 
+  <a href="https://fenixsim.com" target="_blank" rel="noopener noreferrer">Fenix Simulations</a><br>
+  METAR by 
+  <a href="https://ourairports.com" target="_blank" rel="noopener noreferrer">ourairports.com</a><br>
+  ⚠️ NOT FOR REAL WORLD USE ⚠️
+</div>
+
+<!-- LOGIN -->
+<div id="login" class="screen active">
+  <div class="siri-bg"></div>
+  <div class="card">
+    <div class="flip-text" id="flipText"></div>
+    <input id="user" placeholder="Username">
+    <input id="pass" type="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main" class="screen">
+  <div class="card menu">
+    <h1>Flight Docs</h1>
+    <button onclick="go('qrh')">QRH</button>
+    <button onclick="go('checklists')">Checklists</button>
+    <button onclick="requestMetar()">METAR</button>
+  </div>
+</div>
+
+<!-- METAR modal -->
+<div id="metarModal" class="modal">
+  <div class="card">
+    <h2>METAR Request</h2>
+    <h4>The metar system may fail, if so, reload the page or try again later.</h4>
+    <div id="metarResultBox">METAR will appear here</div>
+    <input id="icaoInput" placeholder="Enter ICAO code">
+    <div style="display:flex; gap:12px; margin-top:12px;">
+      <button style="flex:1" onclick="fetchMetar()">Get METAR</button>
+      <button style="flex:1" onclick="closeModal('metarModal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- QRH -->
+<div id="qrh" class="screen">
+  <div class="card menu">
+    <button class="small" onclick="back()">⬅ Back</button>
+    <h1>Select Aircraft</h1>
+    <button onclick="go('engine')">A319</button>
+    <button onclick="go('engine')">A320</button>
+    <button onclick="go('engine')">A321</button>
+  </div>
+</div>
+
+<!-- ENGINE -->
+<div id="engine" class="screen">
+  <div class="card menu">
+    <button class="small" onclick="back()">⬅ Back</button>
+    <h1>Select Engine</h1>
+    <button onclick="openViewer('A320 QRH - IAE','https://docs.google.com/gview?embedded=true&url=https://raw.githubusercontent.com/mateitomensajero/fnxqrhs/dd1b02eeadc96b82bb4df65a598d2f5292b96725/Fenix%20IAE%20QRH.pdf')">IAE</button>
+    <button onclick="openViewer('A320 QRH - CFM','https://docs.google.com/gview?embedded=true&url=https://raw.githubusercontent.com/mateitomensajero/fnxqrhs/dd1b02eeadc96b82bb4df65a598d2f5292b96725/Fenix%20CFM%20QRH.pdf')">CFM</button>
+  </div>
+</div>
+
+<!-- CHECKLISTS -->
+<div id="checklists" class="screen">
+  <div class="card menu">
+    <button class="small" onclick="back()">⬅ Back</button>
+    <h1>Select Aircraft</h1>
+    <button onclick="openChecklist('A319 Checklist','https://cdn.flightsim.to/images/27/a319a320a321-checklist--457255-1731234405-8b9fm.jpg?width=800')">A319</button>
+    <button onclick="openChecklist('A320 Checklist','https://cdn.x-plane.to/images/01/airbus-a32x-checklist-2022-38PzO.jpg?width=1400&auto_optimize=medium')">A320</button>
+    <button onclick="openChecklist('A321 Checklist','https://media.invisioncic.com/c334187/monthly_2025_11/92ad0a11_a245_4004_8835_5a255ac88ba1_6b78677008f43dd5a6b6c52d0621b0dc0c28fc88.jpeg.18ce901d51b1bbe3a23ff6db56161f4d.jpeg')">A321</button>
+  </div>
+</div>
+
+<!-- VIEWER -->
+<div id="viewer" class="screen">
+  <div class="viewer-wrap">
+    <button class="small" style="align-self:flex-start;" onclick="back()">⬅ Back</button>
+    <h2 id="viewerTitle"></h2>
+    <iframe id="pdfFrame"></iframe>
+    <img id="imgFrame" style="display:none" />
+  </div>
+</div>
+
+<!-- ERROR MODAL -->
+<div id="modal" class="modal">
+  <div class="card">
+    <h2 id="modalTitle">Error</h2>
+    <p id="modalMsg"></p>
+    <button onclick="closeModal()">OK</button>
+  </div>
+</div>
+
+<script>
+// LOGIN
+const LOGINACCEPTED=[{user:"CAPI.a",password:"lorenzo1."},{user:"Pilotojesu",password:"PilotojesuOficial!"},{user:"mzattyz",password:"mialovesmatteo"}];
+let historyStack=["login"];
+function go(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");historyStack.push(id);}
+function back(){historyStack.pop();const prev=historyStack[historyStack.length-1]||"main";document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById(prev).classList.add("active");}
+function login(){const ok=LOGINACCEPTED.some(a=>a.user===user.value&&a.password===pass.value);if(!ok)return showModal("Login Failed","Incorrect username or password.");go("main");}
+function openViewer(title,url){viewerTitle.innerText=title;const isPDF=url.includes(".pdf");pdfFrame.style.display=isPDF?"block":"none";imgFrame.style.display=isPDF?"none":"block";if(isPDF) pdfFrame.src=url;else imgFrame.src=url;go("viewer");}
+
+// CHECKLISTS
+function openChecklist(title, url){
+    imgFrame.style.display = "block";
+    pdfFrame.style.display = "none";
+    imgFrame.src = url;
+
+    // Hide title for checklist images
+    viewerTitle.innerText = "";
+
+    // Size per aircraft
+    if(title.includes("A319")) {
+        imgFrame.style.maxWidth = "800px";
+        imgFrame.style.maxHeight = "70vh";
+    } else if(title.includes("A320")) {
+        imgFrame.style.maxWidth = "1400px";
+        imgFrame.style.maxHeight = "65vh";  // smaller vertical than before
+    } else if(title.includes("A321")) {
+        imgFrame.style.maxWidth = "1200px";
+        imgFrame.style.maxHeight = "60vh";  // smaller vertical
+    }
+
+    go("viewer");
+}
+
+function showModal(title,msg){modalTitle.innerText=title;modalMsg.innerText=msg;modal.classList.add("active");}
+function closeModal(modalId="modal"){document.getElementById(modalId).classList.remove("active");}
+function toggleTheme(){document.body.classList.toggle("dark");}
+
+// Flip Clock
+const flipText=document.getElementById("flipText");
+function createFlip(chars){flipText.innerHTML="";chars.forEach(c=>{const d=document.createElement("div");d.className="flip-char";d.innerHTML=`<span class="front">${c}</span><span class="back"></span>`;flipText.appendChild(d);});}
+function addTile(char=""){const d=document.createElement("div");d.className="flip-char";d.innerHTML=`<span class="front"></span><span class="back">${char}</span>`;flipText.appendChild(d);return d;}
+function flipTo(text){const chars=text.split("");if(chars.length===5&&flipText.children.length===4)addTile("");[...flipText.children].forEach((el,i)=>{setTimeout(()=>{el.querySelector(".back").innerText=chars[i]||"";el.classList.add("flip");setTimeout(()=>{el.querySelector(".front").innerText=chars[i]||"";el.classList.remove("flip");},650);},i*500);});if(chars.length===4&&flipText.children.length===5){const last=flipText.lastElementChild;setTimeout(()=>{last.querySelector(".back").innerText="";last.classList.add("flip");setTimeout(()=>flipText.removeChild(last),650);},2200);}}
+createFlip(["A","3","2","0"]);function loopFlip(){setTimeout(()=>flipTo("HELLO"),600);setTimeout(()=>flipTo("A320"),4800);}loopFlip();setInterval(loopFlip,9500);
+
+// ZULU TIME
+function updateZulu(){const now=new Date();const utc=new Date(now.getTime()+(now.getTimezoneOffset()*60000));document.getElementById("zuluTime").innerText=utc.toISOString().substr(11,8);document.getElementById("zuluDate").innerText=utc.toISOString().substr(0,10);}
+setInterval(updateZulu,1000);updateZulu();
+
+// METAR
+function requestMetar(){document.getElementById("metarModal").classList.add("active");document.getElementById("metarResultBox").innerText="METAR will appear here";document.getElementById("icaoInput").value="";}
 async function fetchMetar(){
-  const icao=icaoInput.value.trim().toUpperCase();
-  if(icao.length!==4){metarResultBox.innerText="Invalid ICAO";return}
-  metarResultBox.innerText="Fetching METAR…";
-  try{
-    const proxy="https://api.allorigins.win/raw?url=";
-    const url=proxy+encodeURIComponent(`https://ourairports.com/airports/${icao}/weather.html`);
-    const res=await fetch(url);
-    const html=await res.text();
-    const m=html.match(/\b[A-Z]{4}\s+\d{6}Z[\s\S]*?=/);
-    metarResultBox.innerText=m?m[0].trim():"METAR not found";
-  }catch(e){
-    metarResultBox.innerText="Error fetching METAR";
+  const icao = document.getElementById("icaoInput").value.trim().toUpperCase();
+  const resultBox = document.getElementById("metarResultBox");
+
+  if(!icao || icao.length !== 4){
+    showModal("Invalid ICAO","Enter a valid 4-letter ICAO code");
+    return;
+  }
+
+  resultBox.innerText = "Fetching METAR…";
+
+  try {
+    const url = `https://aviationweather.gov/api/data/metar?ids=${icao}&format=raw&hours=1`;
+    const resp = await fetch(url);
+    const text = await resp.text();
+
+    if (!text || text.includes("No data found")) {
+      resultBox.innerText = "METAR not found";
+      return;
+    }
+
+    resultBox.innerText = text.trim();
+  } catch (err) {
+    console.error(err);
+    resultBox.innerText = "Error fetching METAR";
   }
 }
 
-// ✅ FIXED ZULU TIME
-function updateZulu(){
-  const now=new Date();
-  document.getElementById("zuluTime").textContent=now.toUTCString().slice(17,25);
-  document.getElementById("zuluDate").textContent=now.toISOString().slice(0,10);
-}
-setInterval(updateZulu,1000);
-updateZulu();
+// Prevent mobile scrolling (iOS safeguard)
+document.addEventListener('touchmove', function(e){e.preventDefault();},{passive:false});
+</script>
+</body>
+</html>
 
-// iOS no scroll
-document.addEventListener('touchmove',e=>e.preventDefault(),{passive:false});
+// Prevent mobile scrolling (iOS safeguard)
+document.addEventListener('touchmove', function(e){e.preventDefault();},{passive:false});
 </script>
 </body>
 </html>
